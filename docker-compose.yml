@@ -3,7 +3,31 @@ services:
   app:
     build: .
     ports:
-      - "8000:8000"
+      - "${APP_PORT}:${APP_PORT}"
     volumes:
       - .:/app
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload 
+    env_file:
+      - .env
+    command: uvicorn main:app --host ${APP_HOST} --port ${APP_PORT} --reload
+    depends_on:
+      - redis
+
+  celery:
+    build: .
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    command: celery -A app.tasks.celery_tasks worker --loglevel=${LOG_LEVEL}
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:

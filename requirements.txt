@@ -1,2 +1,6 @@
 fastapi
-uvicorn 
+uvicorn
+celery
+redis
+python-dotenv
+pydantic-settings 

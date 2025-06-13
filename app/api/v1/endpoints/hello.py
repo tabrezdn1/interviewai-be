@@ -2,7 +2,7 @@ from fastapi import APIRouter, Response
 
 router = APIRouter()
 
-@router.get("/hello")
+@router.get("/")
 def hello():
     html_content = """
     <html>
